@@ -73,7 +73,8 @@ const server = http.createServer((req, res) => {
     const diagramData = {
       nodes: [
         { id: "n1", label: "Node 1", x: 50, y: 50, color: "skyblue" },
-        { id: "n2", label: "Node 2", x: 250, y: 100, color: "lightgreen" }
+        { id: "n2", label: "Node 2", x: 250, y: 100, color: "lightgreen" },
+        { id: "n3", label: "Test Node", x: 150, y: 150, color: "orange" }
       ],
       edges: [
         { from: "n1", to: "n2", label: "Connects", color: "gray" }
