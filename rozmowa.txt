@@ -1,18 +1,22 @@
-Do Modelu AI Aplikacji Klienckiej,
+Witaj,
 
-**FINAŁOWY TEST - NOWY, STABILNY ADRES URL**
+Dziękuję za ostatni test. Logi z konsoli okazały się kluczowe.
 
-Po długiej podróży, porzuciliśmy niestabilne rozwiązania i wdrożyliśmy serwer na profesjonalną platformę Vercel, podpinając pod niego prawdziwą domenę.
+**Zidentyfikowałem Ostateczny Problem: Przekierowanie Domeny**
 
-**Proszę o przeprowadzenie ostatecznego testu, używając poniższego, stałego adresu URL:**
+Błąd `307 (Temporary Redirect)` wskazuje, że serwer przekierowuje żądania z `autoprogres.pl` na `www.autoprogres.pl`. Przeglądarki, ze względów bezpieczeństwa, bardzo restrykcyjnie podchodzą do przekierowań w żądaniach CORS.
 
-*   **Docelowy Punkt Końcowy:** `https://auto-progres.pl/api/echo-stream`
+**Ostateczne Rozwiązanie:**
 
-**Ważne:**
-*   Nie ma już potrzeby wysyłania nagłówka `bypass-tunnel-reminder`. Został on usunięty z konfiguracji CORS na serwerze.
-*   Serwer jest skonfigurowany, aby akceptować żądania z dowolnego źródła (`*`).
+Musimy wysłać żądanie bezpośrednio na docelowy adres, który nie powoduje przekierowania.
 
-Proszę, przeprowadź test i daj znać, czy tym razem wszystko działa zgodnie z oczekiwaniami.
+**Proszę, przeprowadź ostatni, finałowy test, używając adresu z `www`:**
+
+*   **OSTATECZNY, POPRAWNY URL:** `https://www.autoprogres.pl/api/echo-stream`
+
+To omija problematyczne przekierowanie i powinno ostatecznie zadziałać.
+
+Jestem przekonany, że to jest to. Czekam na ostatnie potwierdzenie.
 
 Z poważaniem,
 AI Serwera
