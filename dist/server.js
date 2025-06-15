@@ -34,16 +34,13 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const http = __importStar(require("http"));
-const path = __importStar(require("path"));
-const fs = __importStar(require("fs"));
-const port = 3000;
 const server = http.createServer((req, res) => {
     // Ręczna obsługa CORS dla preflight
-    if (req.method === 'OPTIONS' && req.url === '/api/echo-stream') {
+    if (req.method === 'OPTIONS' && (req.url === '/api/echo-stream' || req.url === '/api/stream-panel' || req.url === '/api/diagram-test' || req.url === '/api/panels')) {
         res.writeHead(204, {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, bypass-tunnel-reminder',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
         });
         res.end();
         return;
@@ -81,34 +78,65 @@ const server = http.createServer((req, res) => {
         });
         return;
     }
-    // Serwowanie plików statycznych
-    const filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url || '');
-    const extname = String(path.extname(filePath)).toLowerCase();
-    const mimeTypes = {
-        '.html': 'text/html',
-        '.js': 'text/javascript',
-        '.css': 'text/css',
-        '.json': 'application/json',
-        '.ts': 'application/x-typescript',
-    };
-    const contentType = mimeTypes[extname] || 'application/octet-stream';
-    fs.readFile(filePath, (error, content) => {
-        if (error) {
-            if (error.code == 'ENOENT') {
-                res.writeHead(404, { 'Content-Type': 'text/html' });
-                res.end('404: File Not Found', 'utf-8');
+    // Nowy endpoint do streamowania panelu
+    if (req.method === 'GET' && req.url === '/api/stream-panel') {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+        });
+        let count = 0;
+        const interval = setInterval(() => {
+            count++;
+            res.write(`Update #${count}: System status is nominal. Current time: ${new Date().toLocaleTimeString()}\n`);
+            if (count === 10) {
+                clearInterval(interval);
+                res.end('Stream finished.');
             }
-            else {
-                res.writeHead(500);
-                res.end('Sorry, check with the site admin for error: ' + error.code + ' ..\n');
-            }
-        }
-        else {
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
-        }
-    });
+        }, 1000);
+        return;
+    }
+    // Nowy endpoint do streamowania diagramu JSON
+    if (req.method === 'GET' && req.url === '/api/diagram-test') {
+        const diagramData = {
+            nodes: [
+                { id: "n1", label: "Node 1", x: 50, y: 50, color: "skyblue" },
+                { id: "n2", label: "Node 2", x: 250, y: 100, color: "lightgreen" },
+                { id: "n3", label: "Test Node", x: 150, y: 150, color: "orange" }
+            ],
+            edges: [
+                { from: "n1", to: "n2", label: "Connects", color: "gray" }
+            ],
+            width: 400,
+            height: 200
+        };
+        res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+        });
+        res.end(JSON.stringify(diagramData, null, 2));
+        return;
+    }
+    // Nowy endpoint do paneli
+    if (req.method === 'GET' && req.url === '/api/panels') {
+        const panelData = [
+            { "id": "uniquePanelId1", "name": "Display Name for Panel 1" },
+            { "id": "uniquePanelId2", "name": "Display Name for Panel 2" }
+        ];
+        res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+        });
+        res.end(JSON.stringify(panelData, null, 2));
+        return;
+    }
+    // Jeśli żądanie nie pasuje do żadnej trasy API, Vercel automatycznie obsłuży pliki statyczne z katalogu 'public'
+    res.writeHead(404, { 'Content-Type': 'text/html' });
+    res.end('404: API Route Not Found', 'utf-8');
 });
+const port = process.env.PORT || 3000;
 server.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server listening on port ${port}`);
 });
+exports.default = server;

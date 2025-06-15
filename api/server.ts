@@ -2,7 +2,7 @@ import * as http from 'http';
 
 const server = http.createServer((req, res) => {
   // Ręczna obsługa CORS dla preflight
-  if (req.method === 'OPTIONS' && (req.url === '/api/echo-stream' || req.url === '/api/stream-panel' || req.url === '/api/diagram-test')) {
+  if (req.method === 'OPTIONS' && (req.url === '/api/echo-stream' || req.url === '/api/stream-panel' || req.url === '/api/diagram-test' || req.url === '/api/panels')) {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -91,9 +91,29 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Nowy endpoint do paneli
+  if (req.method === 'GET' && req.url === '/api/panels') {
+    const panelData = [
+      { "id": "uniquePanelId1", "name": "Display Name for Panel 1" },
+      { "id": "uniquePanelId2", "name": "Display Name for Panel 2" }
+    ];
+
+    res.writeHead(200, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+    });
+    res.end(JSON.stringify(panelData, null, 2));
+    return;
+  }
+
   // Jeśli żądanie nie pasuje do żadnej trasy API, Vercel automatycznie obsłuży pliki statyczne z katalogu 'public'
   res.writeHead(404, { 'Content-Type': 'text/html' });
   res.end('404: API Route Not Found', 'utf-8');
+});
+
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
 
 export default server;
