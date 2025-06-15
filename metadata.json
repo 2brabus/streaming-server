@@ -1,0 +1,5 @@
+{
+  "name": "Streaming Diagram Server",
+  "description": "Simulates a server that makes a sample diagram JSON available at a specific URL path. This app itself displays the diagram content and its path.",
+  "prompt": "This is a simulated diagram streaming server. View the sample diagram data that this server 'provides' below."
+}

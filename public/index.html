@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streaming Diagram Server</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      background-color: #252526;
+      padding: 20px;
+      border-radius: 4px;
+      border: 1px solid #333333;
+    }
+    h1 {
+      color: #cccccc;
+      border-bottom: 1px solid #444444;
+      padding-bottom: 10px;
+    }
+    p {
+      color: #bbbbbb;
+    }
+    code {
+      background-color: #2c2c2c;
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: #d4d4d4;
+      font-family: monospace;
+    }
+    pre {
+      background-color: #1c1c1c;
+      padding: 15px;
+      border-radius: 3px;
+      border: 1px solid #383838;
+      overflow-x: auto;
+      color: #cccccc;
+      font-family: monospace;
+      font-size: 0.9em;
+      max-height: 50vh; /* Limit height for very long JSON */
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #2c2c2c;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #555555;
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #6a6a6a;
+    }
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #555555 #2c2c2c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Symulator Serwera Streamującego Diagramy</h1>
+    <p>Ta aplikacja symuluje serwer, który udostępnia przykładowy diagram JSON pod określonym adresem URL.</p>
+    <p>
+      Dane diagramu są dostępne (można je pobrać np. przez <code>fetch</code> z innej aplikacji) pod adresem:
+      <br />
+      <code>/sample-diagram.json</code>
+    </p>
+    <h2>Zawartość Streamowanego Diagramu:</h2>
+    <pre id="diagram-data-output" class="custom-scrollbar">Ładowanie danych diagramu...</pre>
+  </div>
+  <script type="module" src="/streamer.ts"></script>
+</body>
+</html>

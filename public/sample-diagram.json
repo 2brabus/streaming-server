@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "start-node",
+      "type": "input",
+      "position": { "x": 50, "y": 150 },
+      "data": { "label": "Start" }
+    },
+    {
+      "id": "process-a",
+      "type": "customNode",
+      "position": { "x": 250, "y": 150 },
+      "data": { "label": "Process A" }
+    },
+    {
+      "id": "process-b",
+      "type": "customNode",
+      "position": { "x": 450, "y": 150 },
+      "data": { "label": "Process B" }
+    },
+    {
+      "id": "end-node",
+      "type": "output",
+      "position": { "x": 650, "y": 150 },
+      "data": { "label": "End" }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-start-processA",
+      "source": "start-node",
+      "target": "process-a",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e-processA-processB",
+      "source": "process-a",
+      "target": "process-b",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e-processB-end",
+      "source": "process-b",
+      "target": "end-node",
+      "type": "smoothstep"
+    }
+  ]
+}
