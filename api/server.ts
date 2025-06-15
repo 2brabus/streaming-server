@@ -2,10 +2,10 @@ import * as http from 'http';
 
 const server = http.createServer((req, res) => {
   // Ręczna obsługa CORS dla preflight
-  if (req.method === 'OPTIONS' && req.url === '/api/echo-stream') {
+  if (req.method === 'OPTIONS' && (req.url === '/api/echo-stream' || req.url === '/api/stream-panel')) {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     });
     res.end();
@@ -44,6 +44,27 @@ const server = http.createServer((req, res) => {
         }
       }, 200);
     });
+    return;
+  }
+
+  // Nowy endpoint do streamowania panelu
+  if (req.method === 'GET' && req.url === '/api/stream-panel') {
+    res.writeHead(200, {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    });
+
+    let count = 0;
+    const interval = setInterval(() => {
+      count++;
+      res.write(`Update #${count}: System status is nominal. Current time: ${new Date().toLocaleTimeString()}\n`);
+      if (count === 10) {
+        clearInterval(interval);
+        res.end('Stream finished.');
+      }
+    }, 1000);
     return;
   }
 
