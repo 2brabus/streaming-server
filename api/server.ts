@@ -2,7 +2,7 @@ import * as http from 'http';
 
 const server = http.createServer((req, res) => {
   // Ręczna obsługa CORS dla preflight
-  if (req.method === 'OPTIONS' && (req.url === '/api/echo-stream' || req.url === '/api/stream-panel')) {
+  if (req.method === 'OPTIONS' && (req.url === '/api/echo-stream' || req.url === '/api/stream-panel' || req.url === '/api/diagram-test')) {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -65,6 +65,28 @@ const server = http.createServer((req, res) => {
         res.end('Stream finished.');
       }
     }, 1000);
+    return;
+  }
+
+  // Nowy endpoint do streamowania diagramu JSON
+  if (req.method === 'GET' && req.url === '/api/diagram-test') {
+    const diagramData = {
+      nodes: [
+        { id: "n1", label: "Node 1", x: 50, y: 50, color: "skyblue" },
+        { id: "n2", label: "Node 2", x: 250, y: 100, color: "lightgreen" }
+      ],
+      edges: [
+        { from: "n1", to: "n2", label: "Connects", color: "gray" }
+      ],
+      width: 400,
+      height: 200
+    };
+
+    res.writeHead(200, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+    });
+    res.end(JSON.stringify(diagramData, null, 2));
     return;
   }
 
