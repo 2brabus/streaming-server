@@ -1,6 +1,6 @@
-import * as http from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 
-const server = http.createServer((req, res) => {
+export default function handler(req: IncomingMessage, res: ServerResponse) {
   // Ręczna obsługa CORS dla preflight
   if (req.method === 'OPTIONS' && req.url === '/api/diagram-test') {
     res.writeHead(204, {
@@ -35,14 +35,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Jeśli żądanie nie pasuje do żadnej trasy API, Vercel automatycznie obsłuży pliki statyczne z katalogu 'public'
+  // Jeśli żądanie nie pasuje do żadnej trasy API
   res.writeHead(404, { 'Content-Type': 'text/html' });
   res.end('404: API Route Not Found', 'utf-8');
-});
-
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
-
-export default server;
+}
